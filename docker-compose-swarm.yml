@@ -1,0 +1,29 @@
+version: '3'
+services:
+  nest:
+    image: nest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - .env:/app/.env
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      MYSQL_DATABASE: subscriptions
+      MYSQL_USER: nest
+      MYSQL_PASSWORD: nest
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mariadbdata:/var/lib/mysql
+
+volumes:
+  mariadbdata:

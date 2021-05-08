@@ -1,0 +1,36 @@
+version: '2'
+services:
+  nest:
+    build: .
+    container_name: subscriptions
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+      - .env:/app/.env
+    ports:
+      - 3000:3000
+    networks:
+      - expose_apis
+
+  db:
+    image: mariadb:10
+    container_name: subscriptions-db
+    environment:
+      MYSQL_DATABASE: subscriptions
+      MYSQL_USER: nest
+      MYSQL_PASSWORD: nest
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadbdata:/var/lib/mysql
+    networks:
+      - expose_apis
+
+volumes:
+  mariadbdata:
+
+networks:
+  expose_apis:
+    name: expose_apis
